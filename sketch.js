@@ -1,9 +1,11 @@
 var trex ,trex_running;
 var groundImage;
 var invisibleGround;
+var cloud, cloudImage;
 function preload(){
   trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");  
   groundImage = loadImage("ground2.png");
+  cloudImage = loadImage("cloud.png");
 }
 
 function setup(){
@@ -52,5 +54,11 @@ function draw(){
 }
 
 function spawnClouds(){
-  
+  if(frameCount % 60 === 0){ 
+  cloud = createSprite(600, 100, 40, 10);
+  cloud.addImage(cloudImage);
+  cloud.y = Math.round(random(10,60))
+  cloud.scale = 0.4;
+  cloud.velocityX = -3;
+  }
 }
