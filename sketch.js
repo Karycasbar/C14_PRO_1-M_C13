@@ -3,6 +3,10 @@ var groundImage;
 var invisibleGround;
 var cloud, cloudImage;
 var obstacle, obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6;
+var score = 0;
+var PLAY = 1;
+var END = 0;
+var gameState = PLAY;
 function preload(){
   trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");  
   groundImage = loadImage("ground2.png");
@@ -18,6 +22,7 @@ function preload(){
 
 function setup(){
   createCanvas(600,200)
+
   
   //crear sprite de Trex
   trex = createSprite(50,180,20,50);
@@ -41,12 +46,22 @@ function setup(){
 
 function draw(){
   background("white");
-  //console.log(trex.y);
-  ground.velocityX = -2;
-  if(ground.x < 0){
-    ground.x = ground.width/2;
-  }
- 
+  text("Puntuación " + score, 500, 50);
+  
+
+  //Estados de juego
+  if(gameState === PLAY){
+  //mover el suelo
+    ground.velocityX = -4;
+
+    //generar puntuación
+    score = score + Math.round(frameCount / 60);
+
+    //reiniciar el suelo
+    if(ground.x < 0){
+      ground.x = ground.width/2;
+    }
+
   //salto del trex
   if(keyDown("space") && trex.y >= 100){
     trex.velocityY = -10;
@@ -54,14 +69,29 @@ function draw(){
   //caida/gravedad del trex
   trex.velocityY = trex.velocityY + 0.5;
 
+  //llamado de la función de nubes
+    spawnClouds();
+
+    //llamado de la función de obstaculos
+      spawnObstacles();
+
+  }
+  else if(gameState === END){
+    //detener el suelo
+    ground.velocityX = 0;
+
+  }
+
+  //console.log(trex.y);
+
+
+ 
+
+
   //evitar que el trex caiga
   trex.collide(invisibleGround);
 
-  //llamado de la función de nubes
-  spawnClouds();
 
-//llamado de la función de obstaculos
-  spawnObstacles();
 
   drawSprites();
 }
